@@ -18,7 +18,7 @@ class _EmailAndPasswordFieldsState extends State<EmailAndPasswordFields> {
   bool hasNumber = false;
   bool hasSpecialCharacter = false;
   bool hasMinLength = false;
-  late TextEditingController passwordController;
+  // late TextEditingController passwordController;
 
   @override
   void initState() {
@@ -82,9 +82,9 @@ class _EmailAndPasswordFieldsState extends State<EmailAndPasswordFields> {
     );
   }
 
-  @override
-  void dispose() {
-    passwordController.dispose();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   passwordController.dispose();
+  //   super.dispose();
+  // }
 }

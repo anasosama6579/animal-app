@@ -17,6 +17,13 @@ class AppStyles {
     fontFamily: 'Poppins',
   );
 
+  static TextStyle font16MediumGreen = TextStyle(
+    fontSize: 16.sp,
+    fontWeight: FontWeight.w500,
+    color: AppColors.primaryGreen,
+    fontFamily: 'Poppins',
+  );
+
   static TextStyle font12RegularGray = TextStyle(
     fontSize: 12.sp,
     fontWeight: FontWeight.w400,
