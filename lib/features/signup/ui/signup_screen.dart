@@ -2,10 +2,13 @@ import 'package:animal_app/assets/assets.dart';
 import 'package:animal_app/core/helpers/spacing.dart';
 import 'package:animal_app/core/theming/app_styles.dart';
 import 'package:animal_app/core/widgets/custom_button.dart';
+import 'package:animal_app/features/signup/logic/signup/signup_cubit.dart';
 import 'package:animal_app/features/signup/ui/widgets/already_have_account.dart';
+import 'package:animal_app/features/signup/ui/widgets/signup_bloc_listener.dart';
 import 'package:animal_app/features/signup/ui/widgets/signup_info_fields.dart';
 import 'package:animal_app/features/signup/ui/widgets/upload_image_container.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -36,11 +39,15 @@ class SignupScreen extends StatelessWidget {
                 verticalSpacing(25),
                 SignupInfoFields(),
                 verticalSpacing(10),
-                UploadImageContainer(),
+                UploadImageContainer(
+                  cameraOnTap: context.read<SignupCubit>().pickImageFromCamera,
+                  galleryOnTap: context.read<SignupCubit>().pickImageFromGallery,
+                ),
                 verticalSpacing(20),
-                CustomButton(onPressed: () {}, text: "Sign Up"),
+                CustomButton(onPressed: (){validateAndSignup(context);}, text: "Sign Up"),
                 verticalSpacing(20),
                 AlreadyHaveAccount(),
+                SignupBlocListener()
               ],
             ),
           ),
@@ -48,5 +55,9 @@ class SignupScreen extends StatelessWidget {
       ),
     );
   }
+  void validateAndSignup(BuildContext context) {
+    if(context.read<SignupCubit>().formKey.currentState!.validate()){
+      context.read<SignupCubit>().emitSignupStates();
+    }
+  }
 }
-

@@ -1,8 +1,11 @@
+import 'package:animal_app/core/helpers/app_regex.dart';
 import 'package:animal_app/core/helpers/spacing.dart';
 import 'package:animal_app/core/theming/app_styles.dart';
 import 'package:animal_app/core/widgets/app_text_form_field.dart';
 import 'package:animal_app/core/widgets/password_validation.dart';
+import 'package:animal_app/features/signup/logic/signup/signup_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SignupInfoFields extends StatefulWidget {
   const SignupInfoFields({super.key});
@@ -19,27 +22,34 @@ class _SignupInfoFieldsState extends State<SignupInfoFields> {
   bool hasSpecialCharacter = false;
   bool hasMinLength = false;
   bool isValidPassword = false;
-  // late TextEditingController passwordController;
+  late TextEditingController passwordController;
 
   @override
   void initState() {
     super.initState();
-    //? Initialize passwordController here from Cubit
-    //? setupPasswordListener();
-    //setState(() {
-    // isValidPassword = AppRegex.isValidPassword(password);
-    // hasLowercase = AppRegex.hasLowercase(password);
-    // hasUppercase = AppRegex.hasUppercase(password);
-    // hasNumber = AppRegex.hasNumber(password);
-    // hasSpecialCharacter = AppRegex.hasSpecialCharacter(password);
-    // hasMinLength = AppRegex.hasMinLength(password);
-    // });
+
+    passwordController = context.read<SignupCubit>().password;
+   setupPasswordListener();
+  }
+
+  void setupPasswordListener() {
+    passwordController.addListener(() {
+      final password = passwordController.text;
+
+      setState(() {
+        hasLowercase = AppRegex.hasLowercase(password);
+        hasUppercase = AppRegex.hasUppercase(password);
+        hasNumber = AppRegex.hasNumber(password);
+        hasSpecialCharacter = AppRegex.hasSpecialCharacter(password);
+        hasMinLength = AppRegex.hasMinLength(password);
+      });
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Form(
-      //? Add form key here from Cubit
+      key: context.read<SignupCubit>().formKey,
       child: Column(
         children: [
           Align(
@@ -48,23 +58,29 @@ class _SignupInfoFieldsState extends State<SignupInfoFields> {
                   Text("First Name", style: AppStyles.font16RegularDarkGray)),
           verticalSpacing(8),
           AppTextFormField(
+            controller: context.read<SignupCubit>().firstName,
               hintText: "Enter your First Name",
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Please enter your first name';
                 }
+                return null;
               }),
           verticalSpacing(20),
           Align(
+
               alignment: Alignment.centerLeft,
               child: Text("Last Name", style: AppStyles.font16RegularDarkGray)),
           verticalSpacing(8),
           AppTextFormField(
+              controller: context.read<SignupCubit>().lastName,
+
               hintText: "Enter your Last Name",
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Please enter your last name';
                 }
+                return null;
               }),
           verticalSpacing(20),
           Align(
@@ -72,11 +88,13 @@ class _SignupInfoFieldsState extends State<SignupInfoFields> {
               child: Text("Email", style: AppStyles.font16RegularDarkGray)),
           verticalSpacing(8),
           AppTextFormField(
+              controller: context.read<SignupCubit>().email,
+
               hintText: "Enter your email address",
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Please enter your email';
-                }
+                }return null;
               }),
           verticalSpacing(20),
           Align(
@@ -84,11 +102,12 @@ class _SignupInfoFieldsState extends State<SignupInfoFields> {
               child: Text("Phone", style: AppStyles.font16RegularDarkGray)),
           verticalSpacing(8),
           AppTextFormField(
+              controller: context.read<SignupCubit>().phone,
               hintText: "Enter your Phone Number",
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Please enter your phone number';
-                }
+                }return null;
               }),
           verticalSpacing(20),
           Align(
@@ -96,6 +115,7 @@ class _SignupInfoFieldsState extends State<SignupInfoFields> {
               child: Text("Password", style: AppStyles.font16RegularDarkGray)),
           verticalSpacing(8),
           AppTextFormField(
+              controller: context.read<SignupCubit>().password,
               hintText: "Enter your password",
               isObscureText: isObscure,
               suffixIcon: GestureDetector(
@@ -114,7 +134,7 @@ class _SignupInfoFieldsState extends State<SignupInfoFields> {
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Please enter your password';
-                }
+                }return null;
               }),
           verticalSpacing(8),
           Align(
@@ -139,6 +159,8 @@ class _SignupInfoFieldsState extends State<SignupInfoFields> {
                   style: AppStyles.font16RegularDarkGray)),
           verticalSpacing(8),
           AppTextFormField(
+              controller: context.read<SignupCubit>().confirmedPassword,
+
               hintText: "Enter your password again",
               isObscureText: isObscure,
               suffixIcon: GestureDetector(
@@ -157,13 +179,17 @@ class _SignupInfoFieldsState extends State<SignupInfoFields> {
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Please enter your password again';
-                }
+                }return null;
               }),
         ],
       ),
     );
   }
 
-  //! dispose passwordController if initialized
+@override
+  void dispose() {
+    passwordController.dispose();
+    super.dispose();
+  }
 
 }

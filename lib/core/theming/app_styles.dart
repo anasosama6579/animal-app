@@ -10,6 +10,13 @@ class AppStyles {
     fontFamily: 'Otama.ep',
   );
 
+  static TextStyle font18RegularGreenOtama = TextStyle(
+    fontSize: 18.sp,
+    fontWeight: FontWeight.w400,
+    color: AppColors.primaryGreen,
+    fontFamily: 'Otama.ep',
+  );
+
   static TextStyle font16RegularDarkGray = TextStyle(
     fontSize: 16.sp,
     fontWeight: FontWeight.w400,
