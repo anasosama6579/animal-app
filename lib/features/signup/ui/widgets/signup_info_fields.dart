@@ -42,6 +42,7 @@ class _SignupInfoFieldsState extends State<SignupInfoFields> {
         hasNumber = AppRegex.hasNumber(password);
         hasSpecialCharacter = AppRegex.hasSpecialCharacter(password);
         hasMinLength = AppRegex.hasMinLength(password);
+        isValidPassword = hasLowercase && hasMinLength && hasNumber &&hasSpecialCharacter && hasUppercase;
       });
     });
   }
